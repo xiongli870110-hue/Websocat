@@ -1,42 +1,49 @@
-name: Build Websocat
+name: Build and Release Websocat
 
 on:
-  workflow_dispatch:   # 手动触发
-
-permissions:
-  contents: write   # 允许 GH_TOKEN 写入仓库内容
+  workflow_dispatch:
+  push:
+    branches: [ main ]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  build-websocat:
+    runs-on: ubuntu-22.04  # 使用稳定 runner
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v3
 
-      - name: Install Rust toolchain
-        uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-          override: true
+    - name: Verify Docker availability
+      run: docker --version
 
-      - name: Build websocat
-        run: |
-          git clone https://github.com/vi/websocat.git
-          cd websocat
-          cargo build --release
-          ls -lh target/release/websocat
+    - name: Build websocat inside Ubuntu 20.04 container
+      run: |
+        docker run --rm -v $PWD:/build -w /build ubuntu:20.04 bash -c "
+          apt update &&
+          DEBIAN_FRONTEND=noninteractive apt install -y \
+            build-essential \
+            curl git pkg-config libssl-dev \
+            rustc cargo &&
+          git clone https://github.com/vi/websocat.git &&
+          cd websocat &&
+          cargo build --release &&
+          mkdir -p /build/output &&
+          cp target/release/websocat /build/output/websocat
+        "
 
-      - name: Save binary to repo
-        run: |
-          mkdir -p bin
-          cp websocat/target/release/websocat bin/websocat
-          chmod +x bin/websocat
+    - name: Package build output
+      run: |
+        tar -czvf websocat-build.tar.gz output
 
-      - name: Commit and push binary
-        run: |
-          git config user.name "github-actions"
-          git config user.email "github-actions@github.com"
-          git add bin/websocat
-          git commit -m "🤖 自动编译 websocat" || echo "Nothing to commit"
-          git push origin HEAD:main
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: websocat-1.12.0
+        name: "Websocat Build (Ubuntu 20.04)"
+        body: |
+          ✅ Built inside Ubuntu 20.04 container to ensure glibc compatibility  
+          ✅ Includes WebSocket client/server features  
+          ✅ Compatible with most modern Linux distributions
+        files: websocat-build.tar.gz
+      env:
+        GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
