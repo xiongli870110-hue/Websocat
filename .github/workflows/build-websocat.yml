@@ -1,0 +1,42 @@
+name: Build Websocat
+
+on:
+  workflow_dispatch:   # 手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+
+      - name: Build websocat
+        run: |
+          git clone https://github.com/vi/websocat.git
+          cd websocat
+          cargo build --release
+          ls -lh target/release/websocat
+
+      - name: Save binary to repo
+        run: |
+          mkdir -p bin
+          cp websocat/target/release/websocat bin/websocat
+          chmod +x bin/websocat
+
+      - name: Commit and push binary
+        env:
+          GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add bin/websocat
+          git commit -m "🤖 自动编译 websocat"
+          git remote set-url origin https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}
+          git push origin HEAD:main --force
