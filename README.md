@@ -24,7 +24,7 @@ Websocat 是一个命令行 WebSocket 客户端和服务器。本仓库包含为
 
 ```bash
 # 下载版本
-wget https://github.com/xiongli870110-hue/Websocat/releases/download/websocat-1.13.0/websocat-build.tar.gz
+wget https://github.com/xiongli870110-hue/Websocat/releases/download/websocat-1.14.1/websocat-build.tar.gz
 
 # 解压存档
 tar -xzf websocat-build.tar.gz
