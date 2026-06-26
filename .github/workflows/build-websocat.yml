@@ -34,7 +34,7 @@ jobs:
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: websocat-1.13.0
+        tag_name: websocat-1.14.1
         name: "Websocat Build (Ubuntu 22.04)"
         body: |
           ✅ Built inside Ubuntu 22.04 runner  
