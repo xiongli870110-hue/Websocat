@@ -89,7 +89,7 @@ sudo chmod +x /usr/local/bin/websocat
 ### 下载失败
 如果下载失败，请验证：
 - 互联网连接是否正常
-- 版本是否仍存在于：https://github.com/xiongli870110-hue/Websocat/releases/download/websocat-1.13.0/websocat-build.tar.gz
+- 版本是否仍存在于：https://github.com/xiongli870110-hue/Websocat/releases/download/$version/websocat-build.tar.gz
 - 是否有足够的磁盘空间
 
 ### 兼容性问题
