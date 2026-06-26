@@ -89,7 +89,7 @@ sudo chmod +x /usr/local/bin/websocat
 ### Download Failures
 If the download fails, verify:
 - Your internet connection
-- The release still exists at: https://github.com/xiongli870110-hue/Websocat/releases/download/websocat-1.13.0/websocat-build.tar.gz
+- The release still exists at: https://github.com/xiongli870110-hue/Websocat/releases/download/$version/websocat-build.tar.gz
 - You have sufficient disk space
 
 ### Compatibility Issues
