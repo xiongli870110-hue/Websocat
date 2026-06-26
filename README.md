@@ -26,6 +26,10 @@ Websocat 是一个命令行 WebSocket 客户端和服务器。本仓库包含为
 # 下载版本
 wget https://github.com/xiongli870110-hue/Websocat/releases/download/websocat-1.14.1/websocat-build.tar.gz
 
+# 在Windows11上下载和解压的命令
+wget https://github.com/xiongli870110-hue/Websocat/releases/download/websocat-1.14.1/websocat-build.tar.gz -OutFile websocat-build.tar.gz
+tar -xzf C:\Users\furui\Desktop\websocat-build.tar.gz -C C:\Users\furui\Desktop
+
 # 解压存档
 tar -xzf websocat-build.tar.gz
 
