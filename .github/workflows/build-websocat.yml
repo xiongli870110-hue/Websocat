@@ -5,29 +5,27 @@ on:
 
 jobs:
   build-websocat:
-    runs-on: ubuntu-22.04  # 使用稳定 runner
+    runs-on: ubuntu-22.04
 
     steps:
     - name: Checkout repository
       uses: actions/checkout@v3
 
-    - name: Verify Docker availability
-      run: docker --version
-
-    - name: Build websocat inside Ubuntu 20.04 container
+    - name: Install dependencies
       run: |
-        docker run --rm -v $PWD:/build -w /build ubuntu:20.04 bash -c "
-          apt update &&
-          DEBIAN_FRONTEND=noninteractive apt install -y \
-            build-essential \
-            curl git pkg-config libssl-dev \
-            rustc cargo &&
-          git clone https://github.com/vi/websocat.git &&
-          cd websocat &&
-          cargo build --release &&
-          mkdir -p /build/output &&
-          cp target/release/websocat /build/output/websocat
-        "
+        sudo apt update
+        sudo apt install -y \
+          build-essential \
+          curl git pkg-config libssl-dev \
+          rustc cargo
+
+    - name: Build websocat
+      run: |
+        git clone https://github.com/vi/websocat.git
+        cd websocat
+        cargo build --release
+        mkdir -p ../output
+        cp target/release/websocat ../output/websocat
 
     - name: Package build output
       run: |
@@ -36,10 +34,10 @@ jobs:
     - name: Create GitHub Release
       uses: softprops/action-gh-release@v1
       with:
-        tag_name: websocat-1.12.0
-        name: "Websocat Build (Ubuntu 20.04)"
+        tag_name: websocat-1.13.0
+        name: "Websocat Build (Ubuntu 22.04)"
         body: |
-          ✅ Built inside Ubuntu 20.04 container to ensure glibc compatibility  
+          ✅ Built inside Ubuntu 22.04 runner  
           ✅ Includes WebSocket client/server features  
           ✅ Compatible with most modern Linux distributions
         files: websocat-build.tar.gz
