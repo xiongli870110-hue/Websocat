@@ -24,7 +24,7 @@ Follow these commands to install websocat:
 
 ```bash
 # Download the release
-wget https://github.com/xiongli870110-hue/Websocat/releases/download/websocat-1.13.0/websocat-build.tar.gz
+wget https://github.com/xiongli870110-hue/Websocat/releases/download/websocat-1.14.1/websocat-build.tar.gz
 
 # Extract the archive
 tar -xzf websocat-build.tar.gz
@@ -42,7 +42,7 @@ websocat --version
 ## Build Information
 
 ### Version
-- **Version**: 1.13.0
+- **Version**: 1.14.1
 - **Base OS**: Ubuntu 22.04
 - **Build Date**: See release page for details
 
